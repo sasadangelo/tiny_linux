@@ -8,7 +8,7 @@ Tiny Linux has been tested only on Linux Red Hat Enterprise Workstation. If you 
 
 To create the OS tiny image do the following steps:
 
-1. cd <temp folder>
+1. cd \<temp folder\>
 2. git clone github.com/sasadangelo/tiny_linux.git
 3. cd tiny_linux
 4. ./tiny_linux.sh
