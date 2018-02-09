@@ -2,6 +2,7 @@ LINUX_KERNEL="linux-4.10.6.tar.xz"
 BUSYBOX="busybox-1.26.2.tar.bz2"
 LINUX_URL="https://cdn.kernel.org/pub/linux/kernel/v4.x/$LINUX_KERNEL"
 BUSYBOX_URL="https://busybox.net/downloads/$BUSYBOX"
+INSTALLATION_TYPE="typical"
 
 ###################################################################
 # usage
@@ -17,7 +18,10 @@ BUSYBOX_URL="https://busybox.net/downloads/$BUSYBOX"
 ###################################################################
 usage()
 {
-    echo "Usage: ./tiny_linux.sh"
+    echo "Usage: ./tiny_linux.sh [<installation type]"
+    echo "Where:"
+    echo "    <installation type> could be "typical" and "minimal"."
+    echo "    The defaul is typical."
 }
 
 ###################################################################
@@ -53,12 +57,27 @@ operating_system_not_supported()
 ###################################################################
 parse_params()
 {
-    echo $*
-    if [ $# -gt 0 ]
+    if [ $# -gt 1 ]
     then
         usage
         exit 1
     fi
+
+    while [[ $# > 0 ]]
+    do
+        case $1 in
+        typical | minimal)
+            INSTALLATION_TYPE=$1
+            shift
+        ;;
+        *)
+            echo "ERROR: Unrecognized parameter(s): $*"
+            usage
+            exit 1
+        ;;
+        esac
+    done
+
 }
 
 ###################################################################
@@ -118,6 +137,14 @@ find . -print0 \
 	| cpio --null -ov --format=newc \
 	| gzip -9 > $TOP/obj/initramfs-busybox-x86.cpio.gz
 cd $TOP/linux-4.10.6
-make O=$TOP/obj/linux-x86-basic x86_64_defconfig
-make O=$TOP/obj/linux-x86-basic kvmconfig
-make O=$TOP/obj/linux-x86-basic -j2
+if [ $INSTALLATION_TYPE = "typical" ]
+then
+    make O=$TOP/obj/linux-x86-basic x86_64_defconfig
+    make O=$TOP/obj/linux-x86-basic kvmconfig
+    make O=$TOP/obj/linux-x86-basic -j2
+else
+    make O=../obj/linux-x86-alldefconfig alldefconfig
+    cp $TOP/kconfig/.config.minimal $TOP/obj/linux-x86-alldefconfig/.config
+    make O=../obj/linux-x86-alldefconfig kvmconfig
+    make O=../obj/linux-x86-alldefconfig -j2 
+fi
