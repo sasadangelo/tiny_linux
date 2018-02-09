@@ -28,5 +28,7 @@ To run the OS tiny image use the following command:
 
 ## OS image performance
 
+Here the performance of the OS image in typical and minimal configuration in terms of kernel size and boot time.
+
 1. Typical. Kernel size is 6.4 Mb. Boot Time is 0.55 s.
 2. Minimal. Kernel size is 2.3 Mb. Boot Time is 0.12 s.
