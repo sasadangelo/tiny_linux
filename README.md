@@ -1,6 +1,6 @@
 # Tiny Linux
 
-Tiny Linux is a minimal Linux operating system you can run inside qemu. The operating system is 6.4Mb in size and a boot time of 0.55 secs. The project is based on the following [tutorial](http://mgalgs.github.io/2015/05/16/how-to-build-a-custom-linux-kernel-for-qemu-2015-edition.html).
+Tiny Linux is a minimal Linux operating system you can run inside qemu. The project is based on the following [tutorial](http://mgalgs.github.io/2015/05/16/how-to-build-a-custom-linux-kernel-for-qemu-2015-edition.html).
 
 Tiny Linux has been tested only on Linux Red Hat Enterprise Workstation. If you have a different Linux flavor you have to play a bit with the tiny_linux.sh script and adapt it to your operating system.
 
@@ -28,5 +28,5 @@ To run the OS tiny image use the following command:
 
 ## OS image performance
 
-1. Typical. Kernel size is 6.4 Mb. Boot Time is 0.54 s.
+1. Typical. Kernel size is 6.4 Mb. Boot Time is 0.55 s.
 2. Minimal. Kernel size is 2.3 Mb. Boot Time is 0.12 s.
