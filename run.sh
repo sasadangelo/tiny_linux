@@ -18,7 +18,7 @@ usage()
 {
     echo "Usage: ./run.sh [<installation type]"
     echo "Where:"
-    echo "    <installation type> could be "typical" and "minimal"."
+    echo "    <installation type> could be \"typical\", \"minimal\" or \"tiny\" ."
     echo "    The defaul is typical."
 }
 
@@ -45,7 +45,7 @@ parse_params()
     while [[ $# > 0 ]]
     do
         case $1 in
-        typical | minimal)
+        typical | minimal | tiny)
             INSTALLATION_TYPE=$1
             shift
         ;;
@@ -57,26 +57,6 @@ parse_params()
         esac
     done
 
-}
-
-###################################################################
-# usage
-#
-# Input Parameters:
-#     none
-#
-# Description:
-#     This function prints the usage.
-#
-# Return:
-#     None
-###################################################################
-usage()
-{
-    echo "Usage: ./tiny_linux.sh [<installation type]"
-    echo "Where:"
-    echo "    <installation type> could be "typical" and "minimal"."
-    echo "    The defaul is typical."
 }
 
 ###################################################################
@@ -132,7 +112,7 @@ check_prerequisites()
 parse_params "$@"
 check_prerequisites
 
-if [ $INSTALLATION_TYPE = "typical" ]
+if [ "$INSTALLATION_TYPE" = "typical" ]
 then
     if [ ! -d obj/linux-x86-basic ]
     then
@@ -144,7 +124,8 @@ then
 	-kernel obj/linux-x86-basic/arch/x86_64/boot/bzImage \
 	-initrd obj/initramfs-busybox-x86.cpio.gz \
 	-nographic -append "console=ttyS0" -enable-kvm
-else
+elif [ "$INSTALLATION_TYPE" = "minimal" ]
+then
     if [ ! -d obj/linux-x86-alldefconfig ]
     then
         echo "ERROR: cannot run a minimal OS image."
@@ -154,5 +135,16 @@ else
     /usr/libexec/qemu-kvm \
 	-kernel obj/linux-x86-alldefconfig/arch/x86_64/boot/bzImage \
 	-initrd obj/initramfs-busybox-x86.cpio.gz \
-	-nographic -append "console=ttyS0" -enable-kvm	
+	-nographic -append "console=ttyS0" -enable-kvm
+else
+    if [ ! -d obj/linux-x86-allnoconfig ]
+    then
+        echo "ERROR: cannot run a tiny OS image."
+        echo "       Make sure to run ./tiny_linux.sh tiny"
+        exit 1
+    fi
+    /usr/libexec/qemu-kvm \
+        -kernel obj/linux-x86-allnoconfig/arch/x86_64/boot/bzImage \
+        -initrd obj/initramfs-busybox-x86.cpio.gz \
+        -nographic -append "console=ttyS0" -enable-kvm
 fi

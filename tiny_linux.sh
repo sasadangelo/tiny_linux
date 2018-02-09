@@ -20,7 +20,7 @@ usage()
 {
     echo "Usage: ./tiny_linux.sh [<installation type]"
     echo "Where:"
-    echo "    <installation type> could be "typical" and "minimal"."
+    echo "    <installation type> could be "typical", "minimal" and tiny."
     echo "    The defaul is typical."
 }
 
@@ -66,7 +66,7 @@ parse_params()
     while [[ $# > 0 ]]
     do
         case $1 in
-        typical | minimal)
+        typical | minimal | tiny)
             INSTALLATION_TYPE=$1
             shift
         ;;
@@ -142,9 +142,14 @@ then
     make O=$TOP/obj/linux-x86-basic x86_64_defconfig
     make O=$TOP/obj/linux-x86-basic kvmconfig
     make O=$TOP/obj/linux-x86-basic -j2
-else
+elif [ $INSTALLATION_TYPE = "minimal" ]
+then
     make O=../obj/linux-x86-alldefconfig alldefconfig
     cp $TOP/kconfig/.config.minimal $TOP/obj/linux-x86-alldefconfig/.config
     make O=../obj/linux-x86-alldefconfig kvmconfig
-    make O=../obj/linux-x86-alldefconfig -j2 
+    make O=../obj/linux-x86-alldefconfig -j2
+else
+    make O=$TOP/obj/linux-x86-allnoconfig allnoconfig
+    cp $TOP/kconfig/.config.tiny $TOP/obj/linux-x86-allnoconfig/.config
+    make O=../obj/linux-x86-allnoconfig -j2
 fi
