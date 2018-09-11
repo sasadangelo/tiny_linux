@@ -20,6 +20,7 @@ To create the OS tiny image do the following steps:
 2. git clone github.com/sasadangelo/tiny_linux.git
 3. cd tiny_linux
 4. ./tiny_linux.sh \<installation type\>
+   
    Where \<installation type\> could be "typical", "minimal" or "tiny".
 
 ## How to run OS tiny image
